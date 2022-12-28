@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>shadow-dom,template</title>
+</head>
+<body>
+  <template id="simple-paragraph">
+    <slot name="my-list">default content</slot>
+  </template>
+  <paragraph-simple>
+    <style>
+      ol li {
+        font-size: 18px;
+        font-weight: 700;
+        color: cornflowerblue;
+      }
+    </style>
+    <ol slot="my-list">
+      <li>大风起兮云飞扬</li>
+      <li>滚滚长江东逝水</li>
+    </ol>
+  </paragraph-simple>
+  <script>
+    class Paragraph extends HTMLElement {
+      constructor() {
+        super()
+        let shadowRoot = this.attachShadow({ mode: 'open' })
+        const tempContent = document.getElementById('simple-paragraph').content
+        shadowRoot.appendChild(tempContent.cloneNode(true))
+      }
+    }
+
+    customElements.define('paragraph-simple', Paragraph)
+  </script>
+</body>
+</html>
